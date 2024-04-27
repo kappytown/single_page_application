@@ -1,0 +1,53 @@
+@import './../variables';
+
+.login-form {
+	max-width: 500px;
+	padding: 10px;
+	margin: 0 auto;
+
+	.logo {
+		display: block;
+		width: 90%;
+		max-width: 200px;
+		margin: 0 auto 60px;
+		font-size: 2.5em;
+		font-family: Georgia, Verdana, Arial;
+		text-align: center;
+
+		>img {
+			height: 70px;
+			margin-bottom: 10px;
+		}
+
+		.simple {
+			color: $color_logo_gray;
+		}
+
+		.app {
+			color: $color_logo_blue;
+		}
+	}
+
+	.title {
+		color: #fff;
+		text-align: center;
+	}
+
+	.error {
+		border: 1px solid #dc3545;
+		padding: 10px;
+		background-color: #ffeeee;
+		border-radius: 5px;
+		text-align: center;
+		font-size: .9em;
+		color: #dc3545;
+	}
+
+	.btn {
+		margin: 50px 0 0;
+		width: 100%;
+		border-radius: 20px;
+		padding: 10px 0;
+		font-size: 25px;
+	}
+}

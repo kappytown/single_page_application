@@ -1,0 +1,32 @@
+@import './../variables';
+
+#contact_us {
+	.error {
+		border: 1px solid #dc3545;
+		padding: 10px;
+		background-color: #ffeeee;
+		border-radius: 5px;
+		text-align: center;
+		font-size: .9em;
+		color: #dc3545;
+	}
+
+	.did-you-know {
+		border: 1px solid #ccc;
+		padding: 10px;
+		border-radius: 10px;
+		background-color: #f3f3f3;
+	}
+}
+
+#modal_contact_us_faq_details {
+	.modal-body {
+		padding: 0;
+	}
+
+	.accordion-header {
+		button {
+			padding: 10px 15px;
+		}
+	}
+}

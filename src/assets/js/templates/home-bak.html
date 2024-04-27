@@ -1,0 +1,503 @@
+<div class="col-12 col-sm-10 offset-sm-1">
+	<h1>Home</h1>
+
+	<p>SimpleApp is a lightweight Single-Page Application (SPA) providing you with everything that you would need to create a web app.</p>
+
+	<p>Here is a list of all the features that come with SimpleApp:</p>
+	<ul>
+		<li>Router based page navigation.</li>
+		<li>HTTP request manager to handle all of your RESTful API calls.</li>
+		<li>Caching system used to cache anything that you may need cached such as API responses.</li>
+		<li>Event observer to subscribe to and publish events such as when a user log into the app.</li>
+		<li>Javascript templating system to render dynamic content in your templates.</li>
+		<li>Lazy loading of pages and associated assets to reduce the initial load of the app.</li>
+		<li>ES13 based syntax - upgraded from ES6 for spead operator and private class fields and methods. Depending on your requirements, you may need a transpiler such as Babel.</li>
+	</ul>
+
+	<p>Although lightweight, SimpleApp is not completely Vanilla and does have the following dependencies:</p>
+	<ul>
+		<li>
+			<strong>Router:</strong><br />
+			Navigo 8.11.1 - Simple dependency-free minimalistic Javascript router used to navigate between pages
+		</li>
+		<li>
+			<strong>DOM:</strong><br />
+			jQuery 3.7.1 - For all DOM manipulation
+		</li>
+		<li>
+			<strong>Templates:</strong><br />
+			Underscore.js 1.8.3 - Lightweight library we use for it's Javascript templating system
+		</li>
+		<li>
+			<strong>Layout:</strong><br />
+			Bootstrap 5.3.3 - Used for responsive page layout and modal functionality
+		</li>
+		<li>
+			<strong>Build:</strong><br />
+			Grunt 1.6.1 (Optional) - Used to create build directory, minify, concatinate, replace, copy, and compile Sass to CSS.
+		</li>
+	</ul>
+
+	<p>
+		<strong>How to create a new page?</strong><br />
+		Each page consists of a route, controller, model*, view controller, template, and CSS file. Every page and all of its assets are loaded once upon request to minimize the initial load.
+	</p>
+
+	<ul>
+		<li>The <strong>route</strong> is required for Navigo to navigate to the new page. Each route points to a method in the route controller used to display the page.</li>
+		<li>The <strong>route controller</strong> is used to load the page assets, and instantiate the view</li>
+		<li>The <strong>model</strong> is used to manage the data layer - * not required for all routes</li>
+		<li>The <strong>view controller</strong> is used to manage the model and view as well as update the view when the model changes</li>
+		<li>The <strong>template</strong> is the HTML template for the View</li>
+		<li>The <strong>CSS</strong> is used to style the template</li>
+	</ul>
+
+	<p>Once the new page is loaded, it will be rendered and appended to the DOM. To maintain state, pages are not automatically removed from the DOM but can be if needed.</p>
+
+	<p>
+		<strong>How to setup page navigation?</strong><br />
+		To be able to navigate to any page within your site, you must first create the route to the new page like so:
+	</p>
+
+	<code><pre>
+router.on('contact-us', () => this.#handler(false, 'gotoContactUs'));
+router.on('product/:id', (params) => this.#handler(false, 'gotoProduct', params));
+
+#handler(applyFilters, id, params = {}) {
+	const handleRoute = () => {
+		// Bind itself so the controller instance
+		this.controller[id].bind(this.controller)(params);
+	}
+
+	if (applyFilters) {
+		this.#runFilters(handleRoute);
+	} else {
+		handleRoute();
+	}
+}
+	</pre></code>
+
+	<p>
+		<strong>If your route requires authentication, you can add an authentication filter.</strong><br />
+		<span class="small"><strong>Note:</strong> Authentication would be handled by your server on each API call and return a 401 reponse if not authenticated. The service/Service.js class will handle the 401 response and log the user out.</span>
+	</p>
+
+	<code><pre>
+// Add an authentication filter (example in App.js)
+App() {
+	// ...
+
+	// Authentication filter (please read not above, this is just an example)
+	// Add as many filters as needed.
+	// The first filter that returns false will stop all other filters and prevent the route from executing
+	router.addFilter(() => {
+		if ($.isEmptyObject(this.user)) {
+			this.logout();
+			return false;	// prevent the router from navigating to the current route
+		}
+		return true;
+	});
+	router.init();
+}
+
+// Set true to the first parameter so it knows to filter the route
+router.on('my-account', () => this.#handler(true, 'gotoMyAccount'));
+
+#runFilters(callback) {
+	let pass = true;
+
+	// Run through the list of filters and prevent navigation if any of them return false
+	// Each filter must handle the failure or return true to continue
+	for (let filter of this.#filters) {
+		pass = filter();
+		if (!pass) break;
+	};
+
+	if (pass) callback();
+}
+	</pre></code>
+
+	<p><strong>Now that you have created your new route, here is how to create the route handler that will be used to load the appropriate assets and instantiate the associated view:</strong></p>
+
+	<code><pre>
+// Conroller helper to load all views
+loadController(id, modulePath, assets, params, callback) {
+	viewManager.cleanup();
+	let view;
+
+	const onModuleLoaded = () => {
+		viewManager.setCurrentView(view);
+
+		view.render(params);
+
+		if (callack) callback();
+	}
+
+	const onAssetsLoaded = () => {
+		view = viewManager.getView(id);
+
+		if (!view) {
+			// Load the module
+			// modulePath is the relative path from the router directory
+			import(modulePath).then(module => {
+				const ViewClass = module.default;
+				view = new ViewClass();
+				viewManager.register(id, view);
+
+				onModuleLoaded();
+			}).catch(error => {
+				// handle error 
+			});
+		} else {
+			onModuleLoaded();
+		}
+	}
+
+	if (assets) {
+		lazyLoad.load(assets, onAssetsLoaded);
+	} else {
+		onAssetsLoaded();
+	}
+}
+gotoContactUs() {
+	this.loadController('contact_us', './../views/ContactUsView.js', {css: ['assets/css/views/contact_us.css']});
+}
+
+gotoProducts(params) {
+	// products/mens/10/45
+	// params = {category: 'mens', minPrice: 10, maxPrice: 45}
+	this.loadController('products', './../views/ProductsView.js', {css: ['assets/css/views/products.css']}, params);
+}
+
+gotoProduct(params) {
+	this.loadController('product', './../views/ProductView.js', {css: ['assets/css/views/product.css']}, params);
+}
+
+gotoMyAccount() {
+	this.loadController('my_account', './../views/MyAccountView.js', {css: ['assets/css/views/my_account.css']});
+}
+	</pre></code>
+
+	<p><strong>Here is how to create the associated views with your routes:</strong></p>
+
+	<code><pre>
+import Service from './../service/Service.js';
+
+class Model {
+	constructor() {
+		this.service = new Service();
+	}
+
+	setChangeListener(callback) {
+		this.onChange = callback;
+	}
+
+	setErrorListener(callback) {
+		this.onError = callback;
+	}
+}
+
+class ProductModel extends Model {
+	constructor() {
+		super();
+	}
+
+	fetchProduct(id) {
+		// Here you would get the product details from the server
+		this.service.get(`/product/${id}`, {}, {}, 
+			(data) => {
+				this.onChange(data);
+			},
+			(error) => {
+				this.onError('Failed to get product, please try again.');
+			}
+		);
+	}
+}
+
+import View from './View.js';
+import ProductModel from './../models/ProductModel.js';
+
+class ProductView extends View {
+	product_id;
+
+	constructor() {
+		super();
+
+		this.id = 'product';
+		this.viewName = 'ProductView.js';
+		this.templateId = 'product_templ';
+		this.templateName = 'product';
+
+		// Setup modal and listeners
+		this.model = new ProductModel();
+
+		// Listen to when the model changes
+		this.model.setChangeListener((product) => {
+			this.showProduct(product);
+		});
+
+		// Listen to when the model produces an error
+		this.model.setErrorListener((message) => {
+			this.showError(message);
+		});
+
+		super.init();
+	}
+
+	// URL parameters will be passed into the render method
+	render(params) {
+		super.render(params);
+
+		const { id } = params;
+		this.product_id = id;
+
+		this.loadTemplate((success) => {
+			if (success) {
+				this.addViewToDOM();
+
+				if (this.isViewEmpty) {
+					this.populateView();
+				}
+
+				if (this.isViewEmpty) {
+					this.populateView();
+				}
+
+				this.model.fetchProduct(id);
+			}
+		});
+
+		return this;
+	}
+	
+	// Called if the view is rendered for the first time
+	populateView() {}
+
+	showProduct(product) {
+		// Get the product details template
+		const template = this.templateManager.getTemplate('partials/product_details.html');
+
+		// Show the product details
+		$('.product_details', this.$l).html(_.template(template)({product:product}));
+	}
+
+	showError(message) {
+		// Render the error for 5 seconds
+		const $err = $('.error', this.$el);
+		$err.html(message).show();
+		setTimeout(() => {
+			$el.hide();
+		}, 5000);
+	}
+}
+
+Class ContactUsView extends View {
+	// same as above minue the model
+}
+
+Class MyAccountView extends View {
+	// same as above but with a user model
+}
+	</pre></code>
+
+	<p><strong>Now that you have your new pages completed, here is how you would link to them:</strong></p>
+
+	<code><pre>
+// Navigate via Javascript:
+router.navigate('contact-us');
+
+// Navigate via link:
+&lt;a href="/contact-us" data-navigo&gt;Contact Us&lt;/a&gt;
+
+// Navigate to a product page:
+&lt;a href="/product/2983" data-navigo&gt;Winter Jacket&lt;/a&gt;
+	</pre></code>
+
+	<p><strong>Here is how you would handle product list page with navigation:</strong></p>
+
+	<code><pre>
+class ProductsModel extends Model {
+	constructor() {
+		super();
+
+		this.products = [];
+		this.filters = {
+			category: '',
+			minPrice: null,
+			maxPrice: null
+		}
+		this.pageSize = 10;
+	}
+
+	fetchProducts(page = 1) {
+		const onSuccess = (response) => {
+			if (response && response.data) {
+				const startIndex = (page - 1) * this.pageSize;
+				const endIndex = startIndex + this.pageSize;
+				const totalProducts = response.totalProducts;
+				this.products = response.data;
+				this.onChange(products, page, Math.ceil(totalProducts / this.pageSize));
+			}
+		}
+
+		const onError = (error) => {
+			this.onError('Failed to load product list, please try again.');
+		}
+
+		const params = { ...this.filters, page, size:this.pageSize };
+		this.service.post('/products', params, {}, onSuccess, onError);
+	}
+
+	setFilters(filters) {
+		this.filters = { ...this.filters, ...filters };
+	}
+}
+
+import View from './View.js';
+import ProductsModel from './../models/ProductsModel.js';
+
+class ProductsView extends View {
+	constructor() {
+		super();
+
+		this.id = 'products';
+		this.viewName = 'ProductsView.js';
+		this.templateId = 'products_templ';
+		this.templateName = 'products';
+
+		// Handle product click event
+		this.events = {
+			'click .row.data': 'onProductClick',
+			'click .set-filters': 'onSetFiltersClick'
+		}
+
+		// Setup modal and listeners
+		this.model = new ProducsModel();
+
+		// Listen to when the model changes
+		this.model.setChangeListener((products, currentPage, totalPages) => {
+			this.showProducts(products, currentPage, totalPages);
+		});
+
+		// Listen to when the model produces an error
+		this.model.setErrorListener((message) => {
+			this.showError(message);
+		});
+
+		super.init();
+	}
+
+	render(params) {
+		super.render(params);
+
+		const { category, minPrice, maxPrice } = params.data;
+		this.setFilters(category, minPrice, maxPrice);
+
+		this.loadTemplate((success) => {
+			if (success) {
+				this.addViewToDOM();
+
+				App.setSelectedTab('products');
+
+				if (this.isViewEmpty) {
+					this.populateView();
+				}
+			}
+		}.bind(this));
+
+		return this;
+	}
+
+	populateView() {
+		this.model.fetchProducts(1);
+	}
+
+	showProducts(products, currentPage, totalPages) {
+		const $el = $('.products_list', this.$el).empty();
+
+		// Get the product details template
+		const template = this.templateManager.getTemplate('partials/products_list_item.html');
+
+		// Show the list of products
+		products.forEach(product => {
+			$el.append(_.template(template)({ product: product }));
+		});
+
+		// Add pagination
+		this.showPagination(currentPage, totalPages, (page) => {
+			this.model.fetchProducts(page);
+		});
+	}
+
+	// Set the filters for the next render
+	setFilters(category, minPrice, maxPrice) {
+		category = category || 'mens';
+		minPrice = minPrice || 0;
+		maxPrice = maxPrice || 100000;
+
+		// Set the initial values
+		$('select[name="category"]').val(this.model.filters.category);
+		$('input[name="minPrice"]').val(this.model.filters.minPrice);
+		$('input[name="maxPrice"]').val(this.model.filters.maxPrice);
+
+		this.model.setFilters({ category, minPrice, maxPrice });
+	}
+
+	// Applies the filters and renders the results
+	applyFilters(filters) {
+		this.populateView();
+	}
+
+	showError(message) {
+		// Render the error for 5 seconds
+		const $err = $('.error', this.$el);
+		$err.html(message).show();
+		setTimeout(() => {
+			$el.hide();
+		}, 5000);
+	}
+
+	onProductClick(e) {
+		const $el = $(e.currentTarget);
+		const id = $el.data('id');
+		router.navigate(`product/${id}`);
+	}
+
+	onSetFiltersClick(e) {
+		const $filters = $('.filters', this.$el);
+		const category = $('select[name="category"]').find(':selected').val();
+		const minPrice = $('input[name="minPrice"]').val();
+		const maxPrice = $('input[name="maxPrice"]').val();
+		this.model.setFilters({ category, minPrice, maxPrice });
+		this.applyFilters();
+	}
+}
+</pre></code>
+
+	<p>
+		<strong>If you need to cache any data, here is how you would do it.</strong><br />
+		<strong>Note:</strong> If your cache becomes too large, it will automatically removed old items to free up space.
+	</p>
+
+	<code><pre>
+// Add to cache: (stored for 1 hour by default)
+cache.add(key, data, metadata, callback);
+
+// Get from cache
+cache.get(key);
+
+// Remove from cache
+cache.remove(key);
+</pre></code>
+
+	<p>
+		<strong>How to display a modal dialog using Boostrap modal and underscore _.template:</strong>
+	</p>
+
+	<code><pre>
+const modal = new Modal();
+const body = this.templateManager.getContent('my_template.html', { data: { foo: 'bar' } });
+modal.show('modal_some_unique_id_here', { class: 'info', title: 'My modal title', body: body, closeButton: true});
+</pre></code>
+</div>

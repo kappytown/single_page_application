@@ -1,0 +1,70 @@
+/*	============================================================
+	Modal dialog styles
+	============================================================ */
+.modal-dialog {
+	.modal-header {
+		padding: 10px;
+		height: 45px;
+		background-color: $color_lt_gray;
+		border-radius: 5px 5px 0 0;
+
+		.modal-title {
+			text-transform: capitalize;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			font-size: 18px;
+		}
+
+		.close {
+			margin-left: auto;
+			border: none;
+			font-size: 1.5em;
+			font-weight: bold;
+			color: #000;
+			opacity: .2;
+			cursor: pointer;
+		}
+
+		.close:focus,
+		.close:hover {
+			color: #000;
+			text-decoration: none;
+			filter: alpha(opacity=50);
+			opacity: .5;
+		}
+	}
+
+	.modal-body {
+		height: calc(100vh - 120px);
+		max-height: 600px;
+		overflow-y: auto;
+
+		p:first-child,
+		p:last-child {
+			margin: 0;
+		}
+	}
+
+	.modal-footer {
+		padding: 10px;
+		height: 55px;
+		background-color: $color_lt_gray;
+		border-radius: 0 0 5px 5px;
+
+		>* {
+			margin: 0;
+		}
+
+		.close {
+			margin: 0 auto 0 0;
+		}
+	}
+}
+
+@media (min-width: 768px) {
+	.modal-dialog {
+		margin: 10px auto;
+		max-width: 600px;
+	}
+}

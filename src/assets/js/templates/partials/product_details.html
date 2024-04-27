@@ -1,0 +1,16 @@
+<article>
+	<img src="<%= product.image %>" class="mb-3 shadow p-3 mb-2 rounded" alt="<%= product.title %>" />
+	<p class="mb-2">$<%= product.price %>
+	</p>
+	<p class="mb-2 breadcrumb">
+		<a href="#" data-route="products">Products</a> <span class="divider">/</span> <a href="#" data-route="products/<%= product.category %>">
+			<%= product.category %>
+		</a>
+	</p>
+	<h5 class="mb-2">
+		<%= product.title %>
+	</h5>
+	<p>
+		<%= product.description %>
+	</p>
+</article>

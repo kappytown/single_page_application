@@ -1,0 +1,60 @@
+@import './../variables';
+
+#products {
+	.filters {
+		display: flex;
+		align-items: flex-start;
+		gap: 10px;
+
+		&>div:not(:last-child) {
+			flex: 1;
+		}
+
+		&>div input,
+		&>div select,
+		&>div button {
+			width: 100%;
+		}
+	}
+
+	.error {
+		display: none;
+		padding: 10px;
+		border: 1px solid #ccc;
+	}
+
+	.products_list {
+		.product {
+			border: 1px solid #eaeaea;
+			width: 200px;
+			cursor: pointer;
+
+			&:hover {
+				background-color: $color_lt_gray;
+				border-color: #ddd;
+			}
+
+			hr {
+				border-color: #999;
+				margin: 10px -15px;
+			}
+
+			img {
+				width: 100%;
+				height: 125px;
+				object-fit: contain;
+				mix-blend-mode: multiply;
+			}
+		}
+
+		@media only screen and (max-width: 435px) {
+			.product {
+				width: 100% !important;
+
+				img {
+					height: 175px !important;
+				}
+			}
+		}
+	}
+}

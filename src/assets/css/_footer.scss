@@ -1,0 +1,36 @@
+/*	============================================================
+	Main footer styles
+	============================================================ */
+footer {
+	padding: 40px 0;
+
+	a {
+		display: block;
+	}
+
+	.social-logos {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.social-logos li {
+		display: inline-block;
+		margin: 0 10px;
+	}
+
+	.social-logos a svg {
+		fill: #000;
+		height: 20px;
+		width: 20px;
+	}
+
+	.row {
+		margin-bottom: 20px;
+		text-align: center;
+	}
+
+	.row:last-child {
+		margin: 0;
+	}
+}

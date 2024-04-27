@@ -1,0 +1,120 @@
+/*	============================================================
+	Main header and navigation styles
+	============================================================ */
+header.header {
+	background-color: $color_drk_gray;
+	padding: 10px;
+
+	.logo {
+		font-size: 1.5em;
+		font-family: $font-family;
+		white-space: nowrap;
+
+		>img {
+			width: 25px;
+			margin-right: 5px;
+		}
+
+		.simple {
+			color: $color_logo_gray;
+		}
+
+		.app {
+			color: $color_logo_blue;
+		}
+	}
+
+	.hamburger {
+		img {
+			width: 30px;
+			height: auto;
+			cursor: pointer;
+		}
+	}
+}
+
+// Hamburger menu styles
+#menu {
+	position: fixed;
+	min-width: 180px;
+	height: calc(100% - 50px);
+	background-color: rgb(255, 255, 255);
+	right: -200px;
+	top: 50px;
+	overflow-y: auto;
+	box-shadow: black 0px 0px 0px 0px;
+	z-index: 1000;
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+
+	&.open {
+		right: 0px;
+		box-shadow: black 0px 0px 5px 0px;
+	}
+
+	ul {
+		width: 100%;
+		padding: 0;
+		margin: 0 0 10px 0;
+		font-size: 1em;
+		text-align: left;
+		list-style: none;
+
+		li {
+			border-bottom: 1px solid #bbb;
+
+			>a,
+			>div {
+				padding: 7px 10px;
+				font-size: .85em;
+			}
+
+			>a {
+				display: block;
+				color: #5c606c;
+				text-decoration: none;
+			}
+
+			&.category {
+				background-color: $color_drk_gray;
+				color: $color_white;
+			}
+
+			&.selected {
+				background-color: #d4d4d4;
+			}
+
+			&:hover:not(.selected):not(.category) {
+				cursor: pointer;
+				background-color: $color_lt_gray;
+			}
+		}
+	}
+
+}
+
+// Date updated styles
+.row.date-last-updated {
+	background-color: #efefef;
+	padding: 5px 0;
+	font-size: .85em;
+	border-bottom: 1px solid #ccc;
+}
+
+// Back button for all page views that will lay over the last updated div
+.nav-back {
+	position: absolute;
+	top: -51px;
+	padding: 6px 0 3px 15px;
+	font-size: 1em;
+	background-color: #efefef;
+
+	a:link,
+	a:visited,
+	a:hover,
+	a:active {
+		text-decoration: none;
+	}
+}

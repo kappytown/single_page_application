@@ -1,0 +1,60 @@
+/*	============================================================
+	Main content styles
+	============================================================ */
+main {
+	flex: 1;
+
+	#content {
+		padding: 20px 0px;
+
+		p.small.note {
+			border: 1px solid;
+			border-radius: 5px;
+			padding: 5px;
+			background-color: $color_lt_gray;
+		}
+
+		>div {
+			display: none;
+
+			&.active {
+				display: block;
+			}
+
+			>div>h1:first-child {
+				color: $color_logo_blue;
+				font-size: 2.6em;
+				/* fallback if vw is not supported */
+				font-size: 7.5vw;
+				/* Value should be tested against longest title */
+			}
+		}
+	}
+
+	// Prevent background color changing while scrolling on a mobile device
+	@media (hover: none) {
+		#content .row.data:hover {
+			background-color: inherit !important;
+		}
+	}
+
+	@media screen and (min-width:500px) {
+		#content>div>div>h1:first-child {
+			font-size: 2.6em !important;
+			/* Stop sizing text after screen width >= 500px */
+		}
+	}
+
+	// breadcrumb styles
+	.breadcrumb {
+		color: var(--bs-tertiary-color);
+
+		a {
+			color: var(--bs-tertiary-color);
+		}
+
+		.divider {
+			padding: 0 5px;
+		}
+	}
+}

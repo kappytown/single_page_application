@@ -1,0 +1,17 @@
+<p class="text-capitalize">
+	<strong>Name:</strong><br />
+	<%= account.name.firstname + ' ' + account.name.lastname %>
+</p>
+<p>
+	<strong>Email:</strong><br />
+	<%= account.email %>
+</p>
+<p>
+	<strong>Username:</strong><br />
+	<%= account.username %>
+</p>
+<p class="text-capitalize">
+	<strong>Address:</strong><br />
+	<%= account.address.street %><br />
+		<%= account.address.city + ' ' + account.address.zipcode %>
+</p>

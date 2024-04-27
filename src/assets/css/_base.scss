@@ -1,0 +1,77 @@
+html {
+	font-size: 100%;
+}
+
+body,
+html {
+	margin: 0;
+	padding: 0;
+	letter-spacing: .05em;
+}
+
+body {
+	color: $color_drk_gray;
+	font-size: 14px;
+}
+
+div {
+	position: relative;
+}
+
+.inline {
+	display: inline-block;
+}
+
+/* Removes the yellow background color */
+input:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+
+.hidden {
+	display: none;
+}
+
+.nowrap {
+	white-space: nowrap;
+}
+
+.width-100 {
+	width: 100%;
+}
+
+.text-right {
+	text-align: right;
+}
+
+.align-right {
+	margin-left: auto;
+}
+
+.wrapper {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+/*	============================================================
+	Loading overlay styles
+	============================================================ */
+.loading {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	top: 0;
+	background: $color_black;
+	opacity: 0.8;
+	filter: alpha(opacity=50);
+
+	.wrapper {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		gap: 5px;
+		color: $color_white;
+		height: 100%;
+	}
+}

@@ -1,0 +1,15 @@
+<% products.forEach(product=> { %>
+	<article class="product shadow p-3 mb-2 rounded" data-id="<%= product.id %>">
+		<img src="<%= product.image %>" class="mb-3" alt="<%= product.title %>" />
+		<hr />
+		<p class="mb-2">
+			$<%= product.price %>
+		</p>
+		<p class="mb-2" style="color: var(--bs-tertiary-color);">
+			<%= product.category %>
+		</p>
+		<h6 class="mb-2">
+			<%= product.title %>
+		</h6>
+	</article>
+	<% }); %>

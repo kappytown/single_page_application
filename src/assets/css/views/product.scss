@@ -1,0 +1,15 @@
+#product {
+	.error {
+		display: none;
+		padding: 10px;
+		border: 1px solid #ccc;
+	}
+
+	.product_details {
+		img {
+			width: 200px;
+			height: 200px;
+			object-fit: contain;
+		}
+	}
+}

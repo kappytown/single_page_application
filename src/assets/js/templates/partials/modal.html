@@ -1,0 +1,26 @@
+<div id="<%= modal.id %>" class="modal fade in <%= modal.class || '' %>" tabindex="-1" role="dialog" style="display: block;" aria-modal="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+		<% if (modal.title) { %>
+			<div class="modal-header">
+				<h5 class="modal-title"><%= modal.title %></h5> 
+			<% if (modal.closeButton) { %>
+				<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">X</span></button>
+			<% } %>
+			</div>
+		<% } %>
+			<div class="modal-body"><%= modal.body %></div>
+		<% if (modal.closeButton || modal.actionButtonText) { %>
+			<div class="modal-footer">
+			<% if (modal.closeButton) { %>
+				<button type="button" class="btn btn-sm btn-secondary close" data-bs-dismiss="modal"><%= modal.closeButtontitle || 'Close' %></button>
+			<% } %>
+
+			<% if (modal.actionButtonText) { %>
+				<button type="button" class="btn btn-sm btn-primary"><%= modal.actionButtonText %></button>
+			<% } %>
+			</div>
+		<% } %>
+		</div>
+	</div>
+</div>
