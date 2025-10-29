@@ -26,7 +26,7 @@ class TemplateManager {
 		} else {
 
 			$.ajax({
-				url: `/single_page_application/build/assets/js/templates/${url}?v=${utils.getAppVersion()}`,
+				url: `./assets/js/templates/${url}?v=${utils.getAppVersion()}`,
 				method: 'GET',
 				async: false,
 				success: function (data) {
