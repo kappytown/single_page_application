@@ -47,14 +47,14 @@ class Router {
 			});*/
 
 			// Routes
-			this.on('/', () => this.#handler(false, 'gotoHome'));
-			this.on('home', () => this.#handler(false, 'gotoHome'));
+			this.on('/', () => this.#handler(true, 'gotoHome'));
+			this.on('home', () => this.#handler(true, 'gotoHome'));
 			this.on('ignore', () => this.#handler(false, 'gotoIgnore'));
 			this.on('login', () => this.#handler(false, 'gotoLogin'));
 			this.on('logout', () => this.#handler(false, 'gotoLogout'));
-			this.on('products', () => this.#handler(false, 'gotoProducts'));
-			this.on('products/:category', (params) => this.#handler(false, 'gotoProducts', params));
-			this.on('product/:id', (params) => this.#handler(false, 'gotoProduct', params));
+			this.on('products', () => this.#handler(true, 'gotoProducts'));
+			this.on('products/:category', (params) => this.#handler(true, 'gotoProducts', params));
+			this.on('product/:id', (params) => this.#handler(true, 'gotoProduct', params));
 			this.on('contact-us', () => this.#handler(false, 'gotoContactUs'));
 			this.on('refresh', () => this.#handler(false, 'gotoPageRefresh'));
 			this.on('pagenotfound', () => this.#handler(false, 'gotoPageNotFound'));
