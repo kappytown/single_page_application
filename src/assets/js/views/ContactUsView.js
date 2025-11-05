@@ -53,16 +53,6 @@ export default class ContactUsView extends View {
 		const modal = new Modal();
 		const body = this.templateManager.getContent('modals/contact_us_faqs.html', { account: { name: 'Trevor' } });
 		modal.show('modal_contact_us_faq_details', { class: 'info', title: "Frequently Asked Questions", body: body, closeButton: true, actionButtonText: null });
-		$('.row.question', $('#modal_contact_us_faq_details')).unbind('click').click(function () {
-			const $this = $(this);
-			if ($this.hasClass('on')) {
-				$this.removeClass('on');
-				$('.a', $this).slideUp(200);
-			} else {
-				$this.addClass('on');
-				$('.a', $this).slideDown(200);
-			}
-		});
 	}
 
 	/**
