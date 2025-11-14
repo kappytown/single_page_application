@@ -22,16 +22,6 @@ class Application {
 		// Set dependencies
 		this.storage = new Storage();					// Used to store data in localstorage or a cookie
 
-		/*// These are now Singletons
-		this.lazyload = new Lazyload();					// Used to load all the views assets
-		this.pubsub = new PubSub(); 					// Used to publish and listen to app events
-		this.templateManager = new TemplateManager();	// Used to load templates and return the contents
-		this.viewManager = new ViewManager();			// Used to manage all the views that have been loaded
-		this.router = new Router();						// Used to navigate between views
-		this.cache = new Cache();						// Used to cache any data you may need cached such as an API response
-		// This can be accessed anywhere via App.lazyload etc.
-		*/
-
 		// Event listeners
 		pubsub.subscribe(constants.events.APP_READY, this.#onAppReady, this);
 		pubsub.subscribe(constants.events.LOGGED_IN, this.#onLoggedIn, this);
